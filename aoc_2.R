@@ -10,16 +10,11 @@ df <- data.frame(
   pass = df_raw$V3
 )
 
-# ewww ugly, yuck, bleargh
-
 func <- function(x) {
-  lengths(regmatches(df[x, "pass"], gregexpr(df[x, "letter"], df[x, "pass"])))
+  lengths(regmatches(x["pass"], gregexpr(x["letter"], x["pass"])))
 }
 
-vec <- c()
-for (i in seq_len(nrow(df))) {
-  vec[i] <- func(i)
-}
+count <- apply(df, 1, func)
 
-poss_pass <- vec >= df$min & vec <= df$max
+poss_pass <- count >= df$min & count <= df$max
 sum(poss_pass)
