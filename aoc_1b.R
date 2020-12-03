@@ -1,4 +1,4 @@
-x <- c(scan("aoc_1_data", quiet = TRUE))
+x <- c(scan("data/aoc_1", quiet = TRUE))
 
 matches <- list()
 for (i in 2020 - x) {

@@ -1,6 +1,6 @@
 library(stringr)
 
-df_raw <- read.table("aoc_2_data", sep = " ")
+df_raw <- read.table("data/aoc_2", sep = " ")
 range <- str_split_fixed(df_raw$V1, "-", 2)
 
 df <- data.frame(
