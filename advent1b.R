@@ -1,8 +1,8 @@
-x <- c(scan("day1_data"))
+x <- c(scan("day1_data", quiet = TRUE))
 
-lol <- list()
+matches <- list()
 for (i in 2020 - x) {
-  lol[[i]] <- x[match(x, i - x, nomatch = 0)]
+  matches[[i]] <- x[match(x, i - x, nomatch = 0)]
 }
 
-prod(unique(unlist(lol)))
+prod(unique(unlist(matches)))
