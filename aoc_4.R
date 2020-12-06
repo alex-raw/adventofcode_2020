@@ -1,7 +1,7 @@
 # {{{ Part one
 # workaround for empty line delimiter \n\n
 input <- paste(readLines("data/aoc_4"), collapse = "\n")
-data <- strsplit(input, "\n\n", fixed = TRUE)[[1]]
+data <- strsplit(input, "\n\n")[[1]]
 data <- gsub("\n", " ", data)
 
 # get rid of cid: since ignored
@@ -27,8 +27,8 @@ patterns <- c(
   pid = "pid:\\d{9}( |$)"
 )
 
-for (i in seq_along(patterns)) {
-  data2 <- data2[grep(patterns[i], data2)]
+for (i in patterns) {
+  data2 <- data2[grep(i, data2)]
   print(data2)
 }
 
