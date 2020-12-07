@@ -12,4 +12,5 @@ sum(lengths(sapply(d, unique)))
 d_group <- strsplit(data, ",")
 d_people_group <- lapply(d_group, strsplit, "")
 common <- lapply(d_people_group, function(x) Reduce(intersect, x))
+
 sum(lengths(common))

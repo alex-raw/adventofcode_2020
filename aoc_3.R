@@ -1,4 +1,4 @@
-df <- scan("data/aoc_3", "character")
+df <- scan("data/aoc_3", "character", quiet = TRUE)
 
 # Part 1
 slope <- c(3, 1)
@@ -21,7 +21,7 @@ count_trees <- function(slope, x) {
   full <- sapply(x, complete)
 
   # set up coordinates
-  coor_x <- seq(1, right * length(full) + 100, by = right)
+  coor_x <- seq(1, right * length(full), by = right)
   coor_y <- seq(1, length(full), by = down)
 
   sum(check_tree(full[coor_y], coor_x))
@@ -29,7 +29,7 @@ count_trees <- function(slope, x) {
 
 count_trees(c(3, 1), df)
 
-# Part 1
+# Part 2
 slope <- list(
   c(1, 1),
   c(3, 1),
