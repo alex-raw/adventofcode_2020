@@ -1,20 +1,16 @@
 # {{{ Part one
 # workaround for empty line delimiter \n\n
-input <- paste(readLines("data/aoc_4"), collapse = "\n")
-data <- strsplit(input, "\n\n")[[1]]
-data <- gsub("\n", " ", data)
-
-# get rid of cid: since ignored
-data <- gsub("cid:\\w+( |$)", "", data)
+input <- paste(readLines("data/aoc_4"), collapse = ";")
+d <- strsplit(input, ";;")[[1]]
+d <- gsub(";", " ", d)
+d <- gsub("cid:\\w+( |$)", "", d)
 
 # split elements per row at " " and count
-val <- lengths(strsplit(data, " ")) == 7
+val <- lengths(strsplit(d, " ")) == 7
 
 sum(val)
 
-# }}}
 # {{{ Part two
-data2 <- data[val]
 
 # rules
 patterns <- c(
@@ -27,8 +23,19 @@ patterns <- c(
   "pid:\\d{9}( |$)"
 )
 
+d2 <- d[val]
+
 for (i in patterns) {
-  data2 <- data2[grep(i, data2)]
+  d2 <- d2[grep(i, d2)]
 }
 
-length(data2)
+length(d2)
+
+
+#{{{ Alternative Part one
+d <- paste(readLines("data/aoc_4"), collapse = ";")
+d <- strsplit(d, ";;")[[1]]
+d <- gsub("cid:", "", d)
+d <- gsub("[^:]", "", d)
+sum(nchar(d) == 7)
+#}}}
