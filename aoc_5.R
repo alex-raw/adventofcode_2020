@@ -1,4 +1,4 @@
-d <- scan("data/aoc_5", what = character(), quiet = TRUE)
+d <- scan("data/aoc_5", "character", quiet = TRUE)
 
 # ids of rows and columns
 rw <- 0:127
@@ -42,6 +42,12 @@ max(seats)
 
 # Part two
 sum(min(seats):max(seats)) - sum(seats)
+
+
+
+
+
+
 
 
 
