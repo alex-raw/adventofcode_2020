@@ -1,32 +1,41 @@
-# Part 1 one-liner
-# prod(table(diff(sort(c(0, scan("data/aoc_10"), max(scan("data/aoc_10")) + 3)))))
-
-# adapters <- c(16, 10, 15, 5, 1, 11, 7, 19, 6, 12, 4)
-adapters <- c(28, 33, 18, 42, 31, 14, 46, 20, 48, 47, 24, 23, 49, 45, 19, 38, 39, 11, 1, 32, 25, 35, 8, 17, 7, 9, 4, 2, 34, 10, 3)
-# adapters <- scan("data/aoc_10"), quiet = TRUE)
+# Part 1: readable
+adapters <- scan("data/aoc_10")
 
 outlet <- 0
 built_in <- max(adapters) + 3
-chain <- c(outlet, adapters, built_in)
+chain <- sort(c(outlet, adapters, built_in))
 
-length(chain)
+prod(table(diff(chain)))
 
-# how many adapters can be skipped
-sum(diff(sort(chain), 2) <= 3)
+# Part 2: after reading about the procedure, at least implemented myself :(
 
-# which adapters can be skipped
-diff(sort(chain))
-val <- length(chain[c(FALSE, diff(sort(chain), 2) <= 3, FALSE)])
+delta <- paste0(diff(chain), collapse = "")
+groups <- table(strsplit(delta, "3"))
+result <- 2 ^ groups["11"] * 4 ^ groups["111"] * 7 ^ groups["1111"]
 
+print(result, digits = 15)
 
-n_comb <- function(n) {
-  k <- seq(n)
+# Part 1: one-liner
+# prod(table(diff(sort(c(0, scan("data/aoc_10"), max(scan("data/aoc_10")) + 3)))))
 
-  comb <- function(k) {
-    (factorial(n) / (factorial(k) * factorial(n - k)))
-  }
+# #--- Part two: Fail 1; brute force
+# # skippable numbers
+# skip_1 <- chain[c(FALSE, diff(chain,  2) <= 3, FALSE)]
 
-  sum(sapply(k, comb)) + 1
-}
+# # get all combinations of skippable numbers of all lengths
+# get_combn <- lapply(seq_along(skip_1), function(x) combn(skip_1, x))
 
-n_comb(val)
+# # test whether taking out numbers violates rule
+# test <- function(set) {
+#   max(diff(chain[!chain %in% set])) <= 3
+# }
+
+# # all possible combinations, +1 is the original
+# sum(sapply(lapply(get_combn, function(x) apply(x, 2, test)), sum)) + 1
+
+# # Part two: Fail 2; gave up after realising that I couldn't reduce combinations enough
+# # skippable concecutives, among which the FALSE combinations must be
+# skip_2 <- chain[c(FALSE, diff(chain,  3) <= 3, FALSE)]
+# mat <- which(as.matrix(dist(which(chain %in% skip_1))) == 1, arr.ind = TRUE)
+# new <- rbind(cons[mat[, 1]], cons[mat[, 2]])
+# lol <- new[, c(TRUE, FALSE)]
