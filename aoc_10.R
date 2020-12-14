@@ -18,7 +18,7 @@ print(result, digits = 15)
 # Part 1: one-liner
 # prod(table(diff(sort(c(0, scan("data/aoc_10"), max(scan("data/aoc_10")) + 3)))))
 
-# #--- Part two: Fail 1; brute force
+# #--- Part 2: Fail 1; brute force
 # # skippable numbers
 # skip_1 <- chain[c(FALSE, diff(chain,  2) <= 3, FALSE)]
 
@@ -33,7 +33,7 @@ print(result, digits = 15)
 # # all possible combinations, +1 is the original
 # sum(sapply(lapply(get_combn, function(x) apply(x, 2, test)), sum)) + 1
 
-# # Part two: Fail 2; gave up after realising that I couldn't reduce combinations enough
+# # Part 2: Fail 2; gave up after realising that I couldn't reduce combinations enough
 # # skippable concecutives, among which the FALSE combinations must be
 # skip_2 <- chain[c(FALSE, diff(chain,  3) <= 3, FALSE)]
 # mat <- which(as.matrix(dist(which(chain %in% skip_1))) == 1, arr.ind = TRUE)
