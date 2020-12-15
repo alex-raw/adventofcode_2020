@@ -1,6 +1,6 @@
 # {{{ Part one
 # workaround for empty line delimiter \n\n
-input <- paste(readLines("data/aoc_4"), collapse = ";")
+input <- paste(readLines("data/aoc_04"), collapse = ";")
 d <- strsplit(input, ";;")[[1]]
 d <- gsub(";", " ", d)
 d <- gsub("cid:\\w+( |$)", "", d)
@@ -30,7 +30,7 @@ for (i in patterns) {
 length(d2)
 
 ##{{{ Alternative Part one
-#d <- paste(readLines("data/aoc_4"), collapse = ";")
+#d <- paste(readLines("data/aoc_04"), collapse = ";")
 #d <- strsplit(d, ";;")[[1]]
 #d <- gsub("cid:", "", d)
 #d <- gsub("[^:]", "", d)

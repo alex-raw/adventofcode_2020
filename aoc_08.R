@@ -1,4 +1,4 @@
-d <- read.table("data/aoc_8", col.names = c("instr", "val"))
+d <- read.table("data/aoc_08", col.names = c("instr", "val"))
 
 # Part one
 d$jmp_val <- d$val

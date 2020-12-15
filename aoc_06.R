@@ -1,4 +1,4 @@
-input <- paste(readLines("data/aoc_6"), collapse = "\n")
+input <- paste(readLines("data/aoc_06"), collapse = "\n")
 input <- strsplit(input, "\n\n")[[1]]
 
 # Part one

@@ -1,4 +1,4 @@
-x <- scan("data/aoc_1", quiet = TRUE)
+x <- scan("data/aoc_01", quiet = TRUE)
 
 # part one, a + b = 2020
 prod(x[match(x, 2020 - x, nomatch = 0)])

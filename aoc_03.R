@@ -1,4 +1,4 @@
-df <- scan("data/aoc_3", "character", quiet = TRUE)
+df <- scan("data/aoc_03", "character", quiet = TRUE)
 
 # Part 1
 slope <- c(3, 1)

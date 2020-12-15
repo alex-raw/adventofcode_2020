@@ -1,4 +1,4 @@
-d <- scan("data/aoc_9", quiet = TRUE)
+d <- scan("data/aoc_09", quiet = TRUE)
 
 # Part one
 # Make offset grid with k columns; FIXME: why warnings?

@@ -1,4 +1,4 @@
-df_raw <- read.table("data/aoc_2", sep = " ")
+df_raw <- read.table("data/aoc_02", sep = " ")
 range <- stringr::str_split_fixed(df_raw$V1, "-", 2)
 
 df <- data.frame(

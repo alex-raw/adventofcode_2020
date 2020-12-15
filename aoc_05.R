@@ -1,4 +1,4 @@
-d <- scan("data/aoc_5", "character", quiet = TRUE)
+d <- scan("data/aoc_05", "character", quiet = TRUE)
 
 # ids of rows and columns
 rw <- 0:127
