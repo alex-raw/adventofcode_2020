@@ -5,10 +5,10 @@ d$jmp_val <- d$val
 d[d$instr == "acc" | d$instr == "nop", "jmp_val"] <- 1
 d$target <- 1:nrow(d) + d$jmp_val
 
-row_path <- function() {
+row_path <- function(x) {
   nxt <- hits <- i <- 1
   while (!any(duplicated(hits))) {
-    nxt <- hits[i + 1] <- d[nxt, "target"]
+    nxt <- hits[i + 1] <- x[nxt, "target"]
     i <- i + 1
   }
   return(unique(hits))
@@ -16,10 +16,11 @@ row_path <- function() {
 
 # get acc value from every column that is hit before loop
 sum_acc <- function(p) {
-  sum(d[p, ][d[p, ]$instr == "acc", "val"], na.rm = TRUE)
+  d <- d[p, ]
+  sum(d[d$instr == "acc", "val"], na.rm = TRUE)
 }
 
-p <- row_path()
+p <- row_path(d)
 sum_acc(p)
 
 # Part two
@@ -42,7 +43,7 @@ if (d[candidate, "instr"] == "jmp") {
   d[candidate, "jmp_val"] <- 1
   d$target <- 1:nrow(d) + d$jmp_val
 
-  sum_acc(row_path())
+  sum_acc(row_path(d))
 
 } else {
   print("Nope. Not prepared for nop!")
