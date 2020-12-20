@@ -11,13 +11,10 @@ find_error <- function(x) {
 
 error <- m[which(apply(head(m, -k), 1, find_error)) + k]
 
-m[which(apply(m, 1, cumsum) == error)]
-
 # Part two
 cums_error <- function(i) {
   v <- cumsum(d[i:length(d)])
   n <- which(v == error)
-
   if (length(n) > 0) d[i:(i + n - 1)]     # get both numbers
 }
 

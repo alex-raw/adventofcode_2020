@@ -44,17 +44,10 @@ max(seats)
 sum(min(seats):max(seats)) - sum(seats)
 
 
+# # binary, stupdid!
+# b <- gsub("B|R", "1", gsub("F|L", "0", d))
+# b <- sapply(list(substr(b, 1, 7), substr(b, 8, 10)), strtoi, 2L)
+# seats <- b1[, 1] * 8 + b1[, 2]
 
-
-
-
-
-
-
-# binary, stupdid!
-b <- gsub("B|R", "1", gsub("F|L", "0", d))
-b <- sapply(list(substr(b, 1, 7), substr(b, 8, 10)), strtoi, 2L)
-seats <- b1[, 1] * 8 + b1[, 2]
-
-max(seats)
-sum(min(seats):max(seats)) - sum(seats)
+# max(seats)
+# sum(min(seats):max(seats)) - sum(seats)
