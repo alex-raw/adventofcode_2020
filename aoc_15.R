@@ -1,4 +1,4 @@
-input <- as.integer(c(15, 5, 1, 4, 7, 0))
+input <- c(15, 5, 1, 4, 7, 0)
 
 # Part one and two; exec time ~4s
 play <- function(nums, goal) {
@@ -11,7 +11,7 @@ play <- function(nums, goal) {
   for (turn in turns) {
     last <- pool[n + 1]
     pool[n + 1] <- turn
-    if (last == 0) n <- 0L else n <- turn - last
+    if (last == 0) n <- 0 else n <- turn - last
   }
   return(n)
 }

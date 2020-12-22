@@ -18,8 +18,8 @@ print(result, digits = 15)
 # Part 1: one-liner
 # prod(table(diff(sort(c(0, scan("data/aoc_10"), max(scan("data/aoc_10")) + 3)))))
 
-# #--- Part 2: Fail 1; brute force
-# # skippable numbers
+#--- Part 2: Fail 1; brute force
+# skippable numbers
 # skip_1 <- chain[c(FALSE, diff(chain,  2) <= 3, FALSE)]
 
 # # get all combinations of skippable numbers of all lengths

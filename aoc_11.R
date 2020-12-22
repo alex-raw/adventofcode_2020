@@ -2,7 +2,7 @@
 d <- readLines("data/aoc_11")
 
 # pad edges, to avoid 'out of bounds'
-d <- paste0(".", d, ".")
+d <- paste0(".....", d, ".....")
 pad <- paste(rep(".", nchar(d[1])), collapse = "")
 d <- c(pad, d, pad)
 
@@ -41,7 +41,7 @@ neighbor_matrix <- function(matr, immediate = TRUE) {
     }
       first_seat <- sapply(adj, function(x) {
            x[suppressWarnings(min(which(
-           !is.na(x))))] != 0# & n != Inf
+           !is.na(x))))] != 0
         }
       )
       return(sum(first_seat, na.rm = TRUE))
@@ -78,54 +78,3 @@ simulate <- function(b, tolerance, immediate = TRUE) {
 simulate(m, tolerance = 4, immediate = TRUE)
 # Part Two
 simulate(m, tolerance = 5, immediate = FALSE)
-
-
-
-
-
-
-
-
-
-
-
-# attempt to auto-create directions
-# sgn <- combn(c(" + 1", " - 1", ""), 2)
-# xx <- paste0("matr[x", sgn)
-# xx <- unique(c(sapply(xx, paste0, ", y", sgn, "]")))
-# xx <- xx[- (which(xx == "matr[x, y]"))]
-
-# matr <- m
-# x <- 10
-# y <- 10
-
-# out <- vector("numeric", 8)
-# for (i in seq_along(xx)) out[i] <- eval(parse(text = xx[i]))
-
-# neighbor_matrix <- function(matr, r = 1) {
-
-# # Misread: thought distance is 5 instead of 1
-#   count <- function(xy, matr) {
-#     x <- xy[1]; y <- xy[2]
-#     r <- 1:r
-
-#     if (is.na(m[x, y])) {                            # ignore floor or edge
-#       return(NA)
-#     } else {
-#       adj <- list(
-#         matr[x + r, y],     matr[x - r, y],          # down, up
-#         matr[x, y + r],     matr[x, y - r],          # right, left
-#         matr[x + r, y + r], matr[x + r, y - r],      # right + down, up
-
-#         # # if r > 1
-#         # rd <- diag(matr[x + r, y + r]),    # right down
-#         # ru <- diag(matr[x + r, y - r]),    # right up
-#         # ld <- diag(matr[x - r, y + r]),    # left down
-#         # lu <- diag(matr[x - r, y - r])     # left upr[x - r, y + r], matr[x - r, y - r]       # left + down, up
-#       )
-
-#       first_seat <- sapply(adj, function(x) x[suppressWarnings(
-#                                               min(which(!is.na(x))))] != 0)
-#       return(sum(first_seat, na.rm = TRUE))
-#     }
-#   }
