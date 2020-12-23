@@ -78,3 +78,17 @@ simulate <- function(b, tolerance, immediate = TRUE) {
 simulate(m, tolerance = 4, immediate = TRUE)
 # Part Two
 simulate(m, tolerance = 5, immediate = FALSE)
+
+
+# Improvements
+
+test <- matrix(seq(1,25), ncol = 5)
+
+# outer function
+n_row <- nrow(test)
+
+x <- 12
+up_down <- c(1, -1)
+cross <- c(n_row, n_row + up_down)
+c(x + up_down, x + cross, x - cross)
+
