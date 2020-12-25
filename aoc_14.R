@@ -1,5 +1,4 @@
 d <- paste(readLines("data/aoc_14"), collapse = ",")
-# d <- paste(readLines("data/aoc_14_ex"), collapse = ",")
 d <- gsub("mem\\[|\\]", "", d)
 d <- strsplit(strsplit(d, "mask = ")[[1]], ",")[-1]   # "mask = " first list empty
 d <- lapply(d, strsplit, " = ")

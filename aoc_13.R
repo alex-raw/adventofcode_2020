@@ -1,4 +1,5 @@
-d <- scan("data/aoc_13", "char")
+d <- readLines("data/aoc_13")
+
 timestmp <- as.numeric(d[1])
 bus_id_raw <- as.numeric(strsplit(d[[2]], ",")[[1]])
 
@@ -13,7 +14,7 @@ waiting  <- sapply(schedule, function(x) {
 
 bus_id[which(waiting == min(waiting))] * min(waiting)
 
-# Part two
+# {{{ Part two
 deltas <- which(!is.na(bus_id_raw)) - 1
 vals <- cbind(bus_id, deltas)
 vals <- split(vals, seq(nrow(vals)))
