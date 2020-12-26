@@ -5,7 +5,7 @@ play <- function(nums, goal) {
   pool <- integer(goal)
   pool[nums + 1] <- seq_along(nums)
 
-  turns <- seq(7, goal - 1)
+  turns <- seq(length(input + 1), goal - 1)
   n <- tail(nums, 1)
 
   for (turn in turns) {
@@ -20,60 +20,42 @@ play(input, 2020)
 play(input, 30000000)
 
 
+# # {{{ Attempt one
 
+# play1 <- function(start_nums, goal) {
+#   n <- c(start_nums, rep(NA, goal - length(start_nums)))
+#   i <- length(start_nums)
 
-# {{{ Attempt one
+#   while (i < goal) {
+#     if (n[i] %in% n[1:(i - 1)]) {
+#       n[i + 1] <- i - tail(which(n[-i] == n[i]), 1)
+#     } else {
+#       n[i + 1] <- 0L
+#     }
+#     i <- i + 1L
+#   }
+#   return(tail(n, 1))
+# }
 
-play1 <- function(start_nums, goal) {
-  n <- c(start_nums, rep(NA, goal - length(start_nums)))
-  i <- length(start_nums)
-
-  while (i < goal) {
-    if (n[i] %in% n[1:(i - 1)]) {
-      n[i + 1] <- i - tail(which(n[-i] == n[i]), 1)
-    } else {
-      n[i + 1] <- 0L
-    }
-    i <- i + 1L
-  }
-  return(tail(n, 1))
-}
-
-system.time(play1(input, 2020))
-
+# system.time(play1(input, 2020))
 
 
 
+# # Second attempt
+# pool <- cbind(seq(length(input)), input, deparse.level = 0)
+# turn <- i <- 7L
+# n <- 0L
 
+#   while (turn < goal) {
+#     last <- n == pool[, 2]
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Second attempt
-pool <- cbind(seq(length(input)), input, deparse.level = 0)
-turn <- i <- 7L
-n <- 0L
-
-  while (turn < goal) {
-    last <- n == pool[, 2]
-
-    if (sum(last) == 0) {
-      pool <- rbind(pool, c(turn, n))
-      n <- 0L
-      i <- i + 1L
-    } else {
-      n <- turn - pool[last, 1]
-      pool[last, 1] <- turn
-    }
-    turn <- turn + 1L
-  }
+#     if (sum(last) == 0) {
+#       pool <- rbind(pool, c(turn, n))
+#       n <- 0L
+#       i <- i + 1L
+#     } else {
+#       n <- turn - pool[last, 1]
+#       pool[last, 1] <- turn
+#     }
+#     turn <- turn + 1L
+#   }
