@@ -1,26 +1,32 @@
 d <- readLines("data/aoc_17")
-d <- readLines("data/aoc_17_ex")
 d <- matrix(nrow = nchar(d[1]), byrow = TRUE,
-                as.logical(
-                chartr("#.", "TF",
-                unlist(strsplit(d, "")
-                ))))
+            as.logical(
+            chartr("#.", "TF",
+            unlist(strsplit(d, "")
+            ))))
 
-make_board <- function(m, iter) {
+# Part 1 and 2 ---------------------------------
+make_board <- function(m, n_dim, iter) {
+  # Pre-allocate array big enough to fit all iterations
+  # only does 3 or 4 dims...
   lth <- nrow(m)
+  dif <- lth / 2
 
-  pad1 <- matrix(FALSE, nrow = lth, ncol = iter)
-  m <- cbind(pad1, m, pad1)
+  arr <- array(FALSE, rep(iter * 2 + lth, n_dim))
+  center <- median(seq(nrow(arr)))
+  mid <- seq(ceiling(center - dif), floor(center + dif))
 
-  pad2 <- matrix(FALSE, nrow = iter, ncol = (iter * 2) + lth)
-  m <- rbind(pad2, m, pad2)
+  if (n_dim == 3) {
+    arr[mid, mid, center] <- m
+  } else {
+    arr[mid, mid, center, center] <- m
+  }
 
-  arr <- array(FALSE, dim = rep(iter * 2 + lth, 3))
-  arr[, , ceiling(nrow(arr) / 2)] <- m
   return(arr)
 }
 
 get_window <- function(n_dim, lth) {
+  # calculate vector indeces for n-dimensional array as 1d vector
   k <- 0L
   for (i in seq(n_dim) - 1L) {
     k <- c(k, k - lth ^ i, k + lth ^ i)
@@ -28,12 +34,26 @@ get_window <- function(n_dim, lth) {
   tail(k, -1)
 }
 
-w <- get_window(3, 3)
-
-sum_neighbors <- function(x, w, data) {
-  subs <- x + w
-  subs <- subs[subs > 0]
-  sum(data[subs])
+sum_neighbors <- function(x, w, arr) {
+  # sum up neighboring sells of `x` in window `w` in array `arr`
+  i <- x + w
+  i <- i[i > 0]
+  sum(arr[i], na.rm = TRUE)
 }
 
-sapply(seq_along(arr), sum_neighbors, w, arr)
+play_sim <- function(x, n_dim, iter = 6) {
+  arr <- make_board(x, n_dim, iter)
+  w   <- get_window(n_dim, nrow(arr))
+  arr <- as.vector(arr)
+
+  for (i in seq_len(iter)) {
+    nbs <- sapply(seq_along(arr), sum_neighbors, w, arr)
+    arr[arr]  <- nbs[arr] %in% c(2, 3)
+    arr[!arr] <- nbs[!arr] == 3
+  }
+
+  sum(arr, na.rm = TRUE)
+}
+
+play_sim(d, 3)
+play_sim(d, 4)

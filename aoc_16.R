@@ -13,7 +13,7 @@ header    <- as.data.frame(do.call(rbind, header))
 header[2] <- sapply(header[2], function(x) {
                # prepare to evaluate ranges in the form c(a:b, c:d)
                x <- gsub(" or ", ",",
-                    gsub("-",    ":", x))
+                    gsub("-", ":", x))
                x <- paste0("c(", x , ")")
 })
 
@@ -26,7 +26,7 @@ n <- unlist(nearby_tick)
 
 sum(n[which(!n %in% valid)])
 
-# {{{ Part two
+# {{{ Part two - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Remove invalid
 valid_tick <- nearby_tick[sapply(nearby_tick, function(x) all(x %in% valid))]
 m <- do.call(rbind, valid_tick)
