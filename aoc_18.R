@@ -1,12 +1,8 @@
-d <- readLines("data/aoc_18")
-
 # Part one and two
-`%sum%`  <- function(a, b) sum(a, b)
-evaluate <- function(v) sapply(v, function(x) eval(parse(text = x)))
-solve    <- function(x) print(sum(evaluate(x)), 15)
+`%+%` <- function(a, b) sum(a, b)
+part_2  <- gsub("\\+", "%+%", readLines("data/aoc_18"))
+part_1  <- gsub("\\*", "%*%", part_2)
 
-part_1 <- gsub("\\*", "%*%", gsub("\\+", "%sum%", d))
-part_2 <- gsub("\\+", "%sum%", d)
-
+solve <- function(x) print(sum(sapply(parse(text = x), eval)), 15)
 solve(part_1)
 solve(part_2)
