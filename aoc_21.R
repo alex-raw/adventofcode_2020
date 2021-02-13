@@ -11,7 +11,6 @@ get_candidates <- function(allergenes, ingredients) {
   m <- matrix(ncol = length(pool),
               nrow = length(allergenes),
               dimnames = list(NULL, pool))
-
   for (allergene in pool) {
     m[, allergene] <- grepl(allergene, allergenes)
   }
@@ -20,6 +19,8 @@ get_candidates <- function(allergenes, ingredients) {
   apply(m, 2, function(y) Reduce(intersect, ingredients[y]))
 }
 
+# check if string is the only candidate, if yes, remove from all other lists
+# until every list has only one element
 reduce_to_uniq <- function(l) {
   while (any(lengths(l) > 1)) {
     for (i in seq_along(l)) {
@@ -33,18 +34,14 @@ reduce_to_uniq <- function(l) {
   unlist(l)
 }
 
-solve_1 <- function(l, v) {
-  ingredients <- unlist(sapply(l, "[[", 1))
-  sum(!ingredients %in% unlist(v))
-}
-
-solve_2 <- function(v) paste0(v[order(names(v))], collapse = ",")
-
 d <- parse_ingredients(readLines("data/aoc_21"))
 ingredients <- sapply(d, "[[", 1)
 allergenes <- sapply(d, "[[", 2)
 
-v <- reduce_to_uniq(get_candidates(allergenes, ingredients))
+result <- reduce_to_uniq(get_candidates(allergenes, ingredients))
+result <- result[order(names(result))]
 
-solve_1(d, v)
-cat(solve_2(v), "\n")
+# print part 1
+sum(!unlist(ingredients) %in% result)
+# print part 2
+cat(paste0(result, collapse = ","), "\n")
