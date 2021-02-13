@@ -24,11 +24,39 @@ play <- function(nums, goal) {
   return(n)
 }
 
-# system.time({
-play(input, 2020)
+kernel <- function(n, pool, turns) {
+  for (turn in turns) {
+    i <- n + 1L
+    if ((last <- pool[i]) == 0L) {
+      n <- 0L
+    } else {
+      n <- turn - last
+    }
+    pool[i] <- turn
+  }
+  return(n)
+}
+
+play2 <- function(nums, goal) {
+  nums  <- as.integer(nums)
+  goal  <- as.integer(goal - 1L)
+
+  pool  <- integer(goal)
+  pool[nums + 1L] <- seq_along(nums)
+
+  lnums <- length(nums)
+  turns <- seq(lnums, goal)
+  n <- nums[lnums]
+
+  kernel(n, pool, turns)
+}
+
+microbenchmark::microbenchmark({
 play(input, 30000000)
+play2(input, 30000000)
 # })
 
+play(input, 2020)
 
 # # {{{ Attempt three (video version)
 # play <- function(nums, goal) {

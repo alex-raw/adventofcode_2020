@@ -46,7 +46,7 @@ rules[[11 + 1]] <- c("42", "31", "|", "42", "11", "31")
 regex_list <- iterate_substitute(rules)
 
 result_2 <- 1; former_result <- 0
-while(result_2 != former_result) {
+while (result_2 != former_result) {
   former_result <- result_2
   regex_list <- substitute_patterns(regex_list, forward = FALSE)
   regex <- lapply(regex_list, gsub, pattern = " ?\\d+ ?", replacement = ".")
