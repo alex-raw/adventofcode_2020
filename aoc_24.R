@@ -49,5 +49,5 @@ flip <- function(x) {
 }
 
 x <- coordinates
-for (i in 100) x <- flip(x)
+for (i in 1:100) x <- flip(x)
 sum(x$black)
