@@ -14,17 +14,14 @@ stash <- function(a, b) {
   list(c(a2, combat(a1, b)), combat(b, a1))
 }
 
-play <- function(m) {
-  repeat {
-    n <- lengths(m)
-    if (any(n == 0)) break
-    i <- which.max(n)
-    m <- stash(m[[i]], m[[-i]])
-  }
-
-  winner <- m[[i]]
-  sum(winner * rev(seq_along(winner)))
+play <- function(m) repeat {
+  n <- lengths(m)
+  if (any(n == 0)) return(m[[i]])
+  i <- which.max(n)
+  m <- stash(m[[i]], m[[-i]])
 }
 
+solve <- function(x) sum(x * rev(seq_along(x)))
+
 # One
-play(parse_cards("data/aoc_22"))
+parse_cards("data/aoc_22") |> play() |> solve()
