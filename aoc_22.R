@@ -1,27 +1,24 @@
 parse_cards <- function(x) {
-  d <- scan(x, comment.char = "P") |> matrix(ncol = 2)
+  d <- scan(x, comment.char = "P", quiet = TRUE) |> matrix(ncol = 2)
   list(d[, 1], d[, 2])
 }
 
 combat <- function(a, b) {
-  wins <- a > b
-  rbind(a[wins], b[wins])
+  n   <- seq_along(b)
+  ans <- cbind(a[n], b)
+  win <- ans[, 1] > ans[, 2]
+  list(a = c(a[-n], t(ans[win, ])),
+       b = c(t(ans[!win, 2:1])))
 }
 
-stash <- function(a, b) {
-  nb <- seq_along(b)
-  a1 <- a[nb]; a2 <- a[-nb]
-  list(c(a2, combat(a1, b)), combat(b, a1))
-}
-
-play <- function(m) repeat {
-  n <- lengths(m)
-  if (any(n == 0)) return(m[[i]])
+play <- function(x) repeat {
+  n <- lengths(x)
+  if (any(n == 0)) return(x[[i]])
   i <- which.max(n)
-  m <- stash(m[[i]], m[[-i]])
+  x <- combat(x[[i]], x[[-i]])
 }
 
-solve <- function(x) sum(x * rev(seq_along(x)))
+solve <- function(x) sum(x * length(x):1)
 
 # One
 parse_cards("data/aoc_22") |> play() |> solve()
