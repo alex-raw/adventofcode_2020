@@ -1,13 +1,12 @@
-handshake <- function(key, door, mod = 20201227L, max_tries = 1e8) {
-  n <- 1L
-  for (i in 1:max_tries) {
-    n <- (n * 7L) %% mod
-    if (n == key) break
+handshake <- function(key, door, mod = 20201227L) {
+  x <- y <- 1L; i <- 0
+  while (!x == key) {
+    x <- (x * 7L) %% mod
+    i <- i + 1
   }
-  n <- 1L
   for (j in 1:i)
-    n <- (n * door) %% mod
-  n
+    y <- (y * door) %% mod
+  return(y)
 }
 
 handshake(key = 6930903, door = 19716708)
