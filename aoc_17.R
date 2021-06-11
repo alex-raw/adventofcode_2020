@@ -1,9 +1,12 @@
-d <- readLines("data/aoc_17")
-d <- matrix(nrow = nchar(d[1]), byrow = TRUE,
-            as.logical(
-            chartr("#.", "TF",
-            unlist(strsplit(d, "")
-            ))))
+d <- chartr("#.", "TF", readLines("data/aoc_17"))
+d <- do.call(rbind, strsplit(d, ""))
+mode(d) <- "logical"
+
+# parse_board <- function(path) readLines(path) |>
+#   strsplit("") |>
+#   do.call(what = rbind) |>
+#   chartr(old = "#.", new = "TF") |>
+#   type.convert()
 
 # Part 1 and 2 ---------------------------------
 make_board <- function(m, n_dim, iter) {
@@ -57,3 +60,11 @@ play_sim <- function(x, n_dim, iter = 6) {
 
 play_sim(d, 3)
 play_sim(d, 4)
+
+parse_input <- function(path) {
+  d <- readLines(path)
+  d <- unlist(strsplit(d, ""))
+    chartr(old = "#.", new = "TF") |> as.logical() |>
+    matrix(nrow = nchar(d[1]), byrow = TRUE)
+}
+

@@ -1,38 +1,25 @@
-# {{{ Part one
-# workaround for empty line delimiter \n\n
-input <- paste(readLines("data/aoc_04"), collapse = ";")
-d <- strsplit(input, ";;")[[1]]
-d <- gsub(";", " ", d)
-d <- gsub("cid:\\w+( |$)", "", d)
+# workaround for empty line delimiter with 2 spaces
+parseports <- function(path)
+  readLines(path) |> paste(collapse = " ") |> strsplit("  ") |> unlist()
 
-# split elements per row at " " and count
-val <- lengths(strsplit(d, " ")) == 7
-sum(val)
+count_fields <- function(x)
+  lengths(gregexpr("(?<!cid):", x, perl = TRUE))
 
-# {{{ Part two
-# rules
-patterns <- c(
-  "byr:19[2-9].|200[0-2]( |$)",
-  "iyr:201.|2020( |$)",
-  "eyr:202.|2030( |$)",
-  "hgt:(((1[5-8].|19[0-3])cm)|((59|6[0-9]|7[0-6])in))( |$)",
-  "hcl:#[a-f0-9]{6}( |$)",
-  "ecl:(amb|blu|brn|gry|grn|hzl|oth)( |$)",
-  "pid:\\d{9}( |$)"
-)
+count_valid <- function(x) {
+  rules <- c(
+    "byr:19[2-9].|200[0-2]",
+    "iyr:201.|2020",
+    "eyr:202.|2030",
+    "hgt:((1[5-8].|19[0-3])cm|((59|6[0-9]|7[0-6])in))",
+    "hcl:#[a-f0-9]{6}",
+    "ecl:(amb|blu|brn|gry|grn|hzl|oth)",
+    "pid:\\d{9}"
+  ) |> paste0("( |$)")
 
-d2 <- d[val]
-
-for (i in patterns) {
-  d2 <- d2[grep(i, d2)]
+  for (i in rules) x <- x[grepl(i, x)]
+  length(x)
 }
 
-length(d2)
-
-##{{{ Alternative Part one
-#d <- paste(readLines("data/aoc_04"), collapse = ";")
-#d <- strsplit(d, ";;")[[1]]
-#d <- gsub("cid:", "", d)
-#d <- gsub("[^:]", "", d)
-#sum(nchar(d) == 7)
-##}}}
+d <- parseports("data/aoc_04")
+sum(count_fields(d) == 7) # Part 1
+count_valid(d)            # Part 2

@@ -1,15 +1,7 @@
-input <- paste(readLines("data/aoc_06"), collapse = "\n")
-input <- strsplit(input, "\n\n")[[1]]
+d <- readLines("data/aoc_06") |> paste(collapse = "\n") |>
+  strsplit("\n\n") |> unlist() |>        # vector of groups
+  strsplit("\n") |> lapply(strsplit, "") # list of character vectors per group
 
-# Part one
-d <- gsub("\n", "", input)
-d <- strsplit(d, "")
-
-sum(lengths(sapply(d, unique)))
-
-# Part two
-d_group <- strsplit(input, "\n")
-d_people_group <- lapply(d_group, strsplit, "")
-common <- lapply(d_people_group, function(x) Reduce(intersect, x))
-
-sum(lengths(common))
+yes <- function(x, fun) sum(lengths(lapply(x, fun)))
+c(part1 = yes(d, \(x) unique(unlist(x))),
+  part2 = yes(d, \(x) Reduce(intersect, x)))

@@ -1,7 +1,5 @@
 d <- readLines("data/aoc_07")
 
-start_time <- Sys.time()
-
 get_higher <- function(color, d) {
   y <- d[unlist(sapply(color, grep, d))]
   gsub(" bag.*", "", y)
@@ -55,7 +53,3 @@ while (!identical(unique(bags), "no other")) {
 }
 
 sum(result)
-
-end_time <- Sys.time()
-
-end_time - start_time

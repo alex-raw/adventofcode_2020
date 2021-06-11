@@ -1,53 +1,28 @@
-d <- scan("data/aoc_05", "character", quiet = TRUE)
-
-# ids of rows and columns
-rw <- 0:127
-cl <- 0:7
-
-# Row
-F <- L <- function(id) {
-  id <<- seq.int(min(id), floor(median(id)))
-}
-
-B <- R <- function(id) {
-  id <<- seq.int(ceiling(median(id)), max(id))
-}
-
 # interpret character string as sequence of functions
-decode <- function(code) {
-  funs <- strsplit(code, split = "")
-  for (i in funs[[1]]) {
-    do.call(i, list(id))
-  }
-  return(id)
+F <- L <- function(id) seq(min(id), floor(median(id)))
+B <- R <- function(id) seq(ceiling(median(id)), max(id))
+to_fun <- function(x)  strsplit(x, "")[[1]] |> lapply(match.fun)
+
+decode <- function(funs, id) {
+  for (fun in funs) id <- fun(id)
+  id
 }
 
-# Find seat id
-seat_id <- function(code) {
-  # row number
-  id <<- rw
-  funs <- gsub("R|L", "", code)
-  x <- decode(funs)
-
-  # column number
-  id <<- cl
-  funs <- gsub("B|F", "", code)
-  y <- decode(funs)
-
-  (x * 8) + y
+seat_id <- function(d) {
+  x <- gsub("R|L", "", d) |> to_fun() |> decode(0:127)
+  y <- gsub("B|F", "", d) |> to_fun() |> decode(0:7)
+  8 * x + y
 }
 
+d <- readLines("data/aoc_05")
 seats <- sapply(d, seat_id)
-max(seats)
 
-# Part two
+max(seats)
 sum(min(seats):max(seats)) - sum(seats)
 
-
 # # binary, stupdid!
-# b <- gsub("B|R", "1", gsub("F|L", "0", d))
-# b <- sapply(list(substr(b, 1, 7), substr(b, 8, 10)), strtoi, 2L)
-# seats <- b1[, 1] * 8 + b1[, 2]
-
-# max(seats)
-# sum(min(seats):max(seats)) - sum(seats)
+# to_bin <- function(x, a, b) strtoi(substr(x, a, b), 2L)
+# x <- chartr("BRFL", "1100", readLines("data/aoc_05"))
+# seats <- 8 * to_bin(x, 1, 7) + to_bin(x, 8, 10)
+# c(part1 = max(seats),
+#   part2 = sum(min(seats):max(seats)) - sum(seats))
