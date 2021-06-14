@@ -1,55 +1,34 @@
-d <- readLines("data/aoc_07")
+pick  <- \(li, id) lapply(li, "[", id)
+named_int  <- \(x) as.integer(x[c(T, F)]) |> `names<-`(x[c(F, T)])
+build_tree <- \(x) pick(x, -1L) |> lapply(named_int) |> `names<-`(pick(x, 1L))
 
-get_higher <- function(color, d) {
-  y <- d[unlist(sapply(color, grep, d))]
-  gsub(" bag.*", "", y)
+parse_bags <- function(x)
+    gsub(" contain| bags?|,|\\.", "", x) |>
+    strsplit("(?<=\\d) | (?=\\d)", perl = TRUE) |>
+    build_tree()
+
+in_names    <- \(x, y) vapply(x, \(x) any(names(x) %in% y), logical(1L))
+find_parent <- \(x, y) names(x[in_names(x, y)])
+
+gather_parents <- function(x, node, iter = 100L) {
+    ans <- vector("list", iter)
+    for (i in 1:iter) {
+        ans[[i]] <- node <- find_parent(x, node)
+        if (!length(node)) break
+    }
+    length(unique(unlist(ans)))
 }
 
-#{{{ iterate until no new bag colors found
-bags <- "shiny gold"
-old_bags <- ""
-
-while (!identical(bags, old_bags)) {
-  old_bags <- bags
-  bags <- unique(get_higher(bags, d))
+count_children <- function(x, init) {
+    node <- n <- 1L
+    names(node) <- init
+    while (length(node)) {
+        node <- Map("*", node, x[names(node)]) |> unname() |> unlist()
+        n <- n + sum(node)
+    }
+    n - 1L
 }
 
-length(bags)
-
-#{{{ ---- Part two
-extract_numbers <- function(x) {
-  y <- as.numeric(unlist(sapply(x, strsplit, "\\D+")))
-  y[is.na(y)] <- 0; y
-}
-
-# extract rule
-get_n_lower <- function(color, d) {
-  pattern <- paste(color, ".*contain ")
-  rule <- d[unlist(sapply(pattern, grep, d))]
-  gsub(".*contain ", "", rule)
-}
-
-# main loop
-bags <- "shiny gold"
-old <- i <- 1
-result <- c()
-
-while (!identical(unique(bags), "no other")) {
-  # get numbers
-  n_lower_bags <- get_n_lower(bags, d)
-  n <- lapply(n_lower_bags, extract_numbers)
-
-  # calculate level sum
-  vec <- Map("*", old, n)
-  result[i] <- sum(unlist(vec))
-
-  # prepare next level
-  old <- unlist(vec)
-  old <- old[old != 0]
-
-  bags <- gsub(" ?\\d ?|\\.| bags?", "", n_lower_bags)
-  bags <- unlist(strsplit(bags, ","))
-  i <- i + 1
-}
-
-sum(result)
+x <- parse_bags(readLines("data/aoc_07"))
+c(part1 = gather_parents(x, "shiny gold"),
+    part2 = count_children(x, "shiny gold"))
