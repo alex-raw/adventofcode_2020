@@ -24,5 +24,3 @@ c(part1 = max(seats),
 # seats <- 8 * to_bin(x, 1, 7) + to_bin(x, 8, 10)
 # c(part1 = max(seats),
 #   part2 = sum(min(seats):max(seats)) - sum(seats))
-
-Reduce(Funcall, , id)
