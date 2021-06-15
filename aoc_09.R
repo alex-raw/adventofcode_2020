@@ -1,22 +1,22 @@
-d <- scan("data/aoc_09")
-
-# Part one
-# Make offset grid
-k <- 25
-m <- matrix(d, ncol = k + 1, nrow = length(d) + 1)[1:1000, ]
-
-find_error <- function(x) {
-  length(intersect(x, x[k + 1] - x)) == 0
+# Make offset grid using recycling
+find_error <- function(x, k = 25) {
+  ln <- length(x)
+  nums <- x[-seq_len(k)]
+  m <- matrix(x, ln + 1, ln - k)[1:k, ]
+  for (i in seq_along(nums)) {
+    n <- nums[i]
+    w <- m[, i]
+    if (!any(w %in% (n - w))) return(n)
+  }
 }
 
-error <- m[which(apply(head(m, -k), 1, find_error)) + k]
-
-# Part two
-cums_error <- function(i) {
-  v <- cumsum(d[i:length(d)])
-  n <- which(v == error)
-  if (length(n) > 0) d[i:(i + n - 1)]     # get both numbers
+find_contiguous <- function(x, error) {
+  for (i in seq_along(x)) {
+    id <- match(error, cumsum(x[-(1:i)]), 0L)
+    if (id) return(x[seq(id, length = i)])
+  }
 }
 
-cons <- head(unlist(sapply(seq_along(d), cums_error)), -1)
-min(cons) + max(cons)
+x <- scan("data/aoc_09")
+c(part1 = error <- find_error(x, 25),
+  part2 = find_contiguous(x, error) |> range() |> sum())

@@ -1,12 +1,8 @@
+solve <- function(x, n)
+  prod(intersect(x, outer(2020 - (n - 2) * x, x, "-")))
+
 x <- scan("data/aoc_01", quiet = TRUE)
+c(part1 = solve(x, 2), part2 = solve(x, 3))
 
-# part one, a + b = 2020
-prod(x[match(x, 2020 - x, nomatch = 0)])
-
-# part two, a + b + c = 2020
-matches <- list()
-for (i in 2020 - x) {
-  matches[[i]] <- x[match(x, i - x, nomatch = 0)]
-}
-
-prod(unique(unlist(matches)))
+# slow oneliner; read stdin; 45 chars
+# combn(scan(),3)->.;prod(.[,colSums(.)==2020])

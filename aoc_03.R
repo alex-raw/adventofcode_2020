@@ -1,19 +1,18 @@
-parse_grid <- function(path) readLines(path) |>
-  strsplit("") |> do.call(what = rbind) |>
-  chartr(old = "#.", new = "TF") |> type.convert()
+parse_grid <- function(x)
+  chartr("#.", "TF", x) |> strsplit("") |>
+  do.call(what = rbind) |> type.convert()
 
 get_xy <- function(k, mod, n) {
   ans <- seq(1, n, by = k) %% mod
   ans[ans == 0] <- mod; ans
 }
 
-count_trees <- function(m, x, y) sum(m[
-  x = get_xy(x, ncol(m), x * ncol(m)),
-  y = get_xy(y, nrow(m), ncol(m))
-])
+count_trees <- function(m, x, y)
+  sum(m[x = get_xy(x, ncol(m), x * ncol(m)),
+        y = get_xy(y, nrow(m), ncol(m))])
 
 # Part 1
-m <- parse_grid("data/aoc_03")
+m <- parse_grid(readLines("data/aoc_03"))
 count_trees(m, 3, 1)
 
 # Part 2

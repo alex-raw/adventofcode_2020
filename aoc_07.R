@@ -31,4 +31,4 @@ count_children <- function(x, init) {
 
 x <- parse_bags(readLines("data/aoc_07"))
 c(part1 = gather_parents(x, "shiny gold"),
-    part2 = count_children(x, "shiny gold"))
+  part2 = count_children(x, "shiny gold"))

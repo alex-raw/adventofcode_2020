@@ -1,6 +1,6 @@
 # workaround for empty line delimiter with 2 spaces
-parseports <- function(path)
-  readLines(path) |> paste(collapse = " ") |> strsplit("  ") |> unlist()
+parseports <- function(x)
+  paste(x, collapse = " ") |> strsplit("  ") |> unlist()
 
 count_fields <- function(x)
   lengths(gregexpr("(?<!cid):", x, perl = TRUE))
@@ -20,6 +20,6 @@ count_valid <- function(x) {
   length(x)
 }
 
-d <- parseports("data/aoc_04")
-sum(count_fields(d) == 7) # Part 1
-count_valid(d)            # Part 2
+d <- parseports(readLines("data/aoc_04"))
+sum(count_fields(d) == 7)
+count_valid(d)
