@@ -1,22 +1,17 @@
 # vector of ingredients
-parse_ingredients <- function(input) {
-  v <- strsplit(gsub("\\)|,", "", input), " \\(contains ")
-  lapply(v, strsplit, " ")
-}
+parse_ingredients <- function(input)
+  strsplit(gsub("\\)|,", "", input), " \\(contains ") |> lapply(strsplit, " ")
 
 get_candidates <- function(allergenes, ingredients) {
-  pool <- unique(unlist(allergenes))
-
   # create boolean matrix for indeces of every allergene occurrence
-  m <- matrix(ncol = length(pool),
-              nrow = length(allergenes),
-              dimnames = list(NULL, pool))
-  for (allergene in pool) {
+  pool <- unique(unlist(allergenes))
+  m <- matrix(F, length(allergenes), length(pool), dimnames = list(NULL, pool))
+
+  for (allergene in pool)
     m[, allergene] <- grepl(allergene, allergenes)
-  }
 
   # column-wise; find ingredients that match all lists with a given allergene
-  apply(m, 2, function(y) Reduce(intersect, ingredients[y]))
+  apply(m, 2, \(y) Reduce(intersect, ingredients[y]))
 }
 
 # check if string is the only candidate, if yes, remove from all other lists
@@ -41,7 +36,5 @@ allergenes <- sapply(d, "[[", 2)
 result <- reduce_to_uniq(get_candidates(allergenes, ingredients))
 result <- result[order(names(result))]
 
-# print part 1
-sum(!unlist(ingredients) %in% result)
-# print part 2
-cat(paste0(result, collapse = ","), "\n")
+c(part1 = sum(!unlist(ingredients) %in% result),
+  part2 = paste0(result, collapse = ","))

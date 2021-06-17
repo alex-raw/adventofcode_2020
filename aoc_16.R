@@ -1,39 +1,34 @@
-input       <- readLines("data/aoc_16")
-line_breaks <- grep("^$", input) - 1
+input <- readLines("data/aoc_16")
+blank <- grep("^$", input) - 1
 
-# Part one
-parse_num   <- function(x) lapply(strsplit(x, ","), as.numeric)
-my_tick     <- parse_num(input[line_breaks[2]])[[1]]
-nearby_tick <- parse_num(input[-seq(line_breaks[2] + 2)])
+scan_ <- function(x) scan(text = x, sep = ",", quiet = TRUE)
 
-header    <- input[1:line_breaks[1]]
-header    <- strsplit(header, ": ")
-header    <- as.data.frame(do.call(rbind, header))
+mine <- scan_(input[blank[2]])
+nearby <- input[-seq_len(blank[2] + 2)]
+nearby <- matrix(scan_(nearby), length(nearby))
 
-header[2] <- sapply(header[2], function(x) {
-               # prepare to evaluate ranges in the form c(a:b, c:d)
-               x <- gsub(" or ", ",",
-                    gsub("-", ":", x))
-               x <- paste0("c(", x , ")")
-})
+header <- input[1:blank[1]] |>
+  strsplit(": | or |-") |>
+  do.call(what = rbind.data.frame) |>
+  `names<-`(c("var", "a1", "b1", "a2", "b2")) |>
+  type.convert()
 
-ranges <- apply(header[2], 1, function(x) eval(parse(text = x)))
-names(ranges) <- unlist(header[1])
+in_range <- with(header,
+  sapply(nearby, \(x) any((x >= a1 & x <= b1) | (x >= a2 & x <= b2)))
+)
 
-# Which numbers in `nearby_tick` are not in the `valid` ranges from the header
-valid <- unique(unlist(ranges))
-n <- unlist(nearby_tick)
+sum(nearby[!in_range])
 
-sum(n[which(!n %in% valid)])
-
-# {{{ Part two - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Remove invalid
-valid_tick <- nearby_tick[sapply(nearby_tick, function(x) all(x %in% valid))]
+valid <- rowSums(matrix(in_range, nrow(nearby))) == ncol(nearby) # TODO:
+nearby[lol, ]
+
+valid_tick <- nearby[sapply(nearby, \(x) all(x %in% valid))]
 m <- do.call(rbind, valid_tick)
 
 # Determine fields which match the possible number ranges
 which_field <- function(v, ranges) {
-  match <- sapply(ranges, function(x) all(v %in% x))
+  match <- sapply(ranges, \(x) all(v %in% x))
   return(names(which(match)))
 }
 
@@ -42,14 +37,14 @@ fields <- integer(length(ranges))
 names(fields) <- names(ranges)
 
 # Assign unique field to column index and get rid of this field; repeat
-for (i in seq(length(matches))) {
-  match_index <- which(lengths(matches) == 1)
-  name <- unlist(matches[match_index])
-  fields[name] <- match_index
+for (i in seq_along(matches)) {
+  ids <- lengths(matches) == 1
+  name <- unlist(matches[ids])
+  fields[name] <- which(ids)
 
   # delete field
-  matches <- lapply(matches, function(x) x[-which(x == name)])
+  matches <- lapply(matches, function(x) x[!x == name])
 }
 
-departure <- fields[grep("departure", names(fields))]
-prod(my_tick[departure])
+departure <- fields[grepl("departure", names(fields))]
+prod(mine[departure])

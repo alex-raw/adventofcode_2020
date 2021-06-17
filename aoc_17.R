@@ -1,70 +1,48 @@
-d <- chartr("#.", "TF", readLines("data/aoc_17"))
-d <- do.call(rbind, strsplit(d, ""))
-mode(d) <- "logical"
+parse_board <- function(x)
+  chartr("#.", "TF", x) |>
+    strsplit("") |> do.call(what = rbind) |>
+    type.convert()
 
-# parse_board <- function(path) readLines(path) |>
-#   strsplit("") |>
-#   do.call(what = rbind) |>
-#   chartr(old = "#.", new = "TF") |>
-#   type.convert()
+make_board <- function(m, k, iter) { # only does 3 or 4 dims...
+  x <- nrow(m)
+  dif <- x / 2
 
-# Part 1 and 2 ---------------------------------
-make_board <- function(m, n_dim, iter) {
-  # Pre-allocate array big enough to fit all iterations
-  # only does 3 or 4 dims...
-  lth <- nrow(m)
-  dif <- lth / 2
-
-  arr <- array(FALSE, rep(iter * 2 + lth, n_dim))
+  arr <- array(FALSE, rep(iter * 2 + x, k))
   center <- median(seq(nrow(arr)))
   mid <- seq(ceiling(center - dif), floor(center + dif))
 
-  if (n_dim == 3) {
-    arr[mid, mid, center] <- m
-  } else {
-    arr[mid, mid, center, center] <- m
-  }
-
-  return(arr)
+  if (k == 3) arr[mid, mid, center] <- m
+  else        arr[mid, mid, center, center] <- m
+  arr
 }
 
-get_window <- function(n_dim, lth) {
+window <- function(k, x) {
   # calculate vector indeces for n-dimensional array as 1d vector
-  k <- 0L
-  for (i in seq(n_dim) - 1L) {
-    k <- c(k, k - lth ^ i, k + lth ^ i)
-  }
-  tail(k, -1)
+  w <- 0L
+  for (i in 0:(k - 1L)) w <- c(w, w - x^i, w + x^i)
+  w[-1L]
 }
 
-sum_neighbors <- function(x, w, arr) {
-  # sum up neighboring sells of `x` in window `w` in array `arr`
-  i <- x + w
-  i <- i[i > 0]
-  sum(arr[i], na.rm = TRUE)
+neighbors <- function(arr, k) {
+  w <- window(k, nrow(arr))
+  i <- mapply(seq, w + 1, w + length(arr))
+  i[i <= 0L] <- NA
+  i
 }
 
-play_sim <- function(x, n_dim, iter = 6) {
-  arr <- make_board(x, n_dim, iter)
-  w   <- get_window(n_dim, nrow(arr))
-  arr <- as.vector(arr)
+play_sim <- function(x, k, iter = 6L) {
+  arr <- make_board(x, k, iter)
+  i <- neighbors(arr, k)
+  ln <- nrow(i)
 
-  for (i in seq_len(iter)) {
-    nbs <- sapply(seq_along(arr), sum_neighbors, w, arr)
-    arr[arr]  <- nbs[arr] %in% c(2, 3)
-    arr[!arr] <- nbs[!arr] == 3
+  for (j in seq_len(iter)) {
+    n <- rowSums(matrix(arr[i], ln), na.rm = TRUE)
+    arr[arr]  <- n[arr] %in% c(2L, 3L)
+    arr[!arr] <- n[!arr] == 3L
   }
-
   sum(arr, na.rm = TRUE)
 }
 
-play_sim(d, 3)
-play_sim(d, 4)
-
-parse_input <- function(path) {
-  d <- readLines(path)
-  d <- unlist(strsplit(d, ""))
-    chartr(old = "#.", new = "TF") |> as.logical() |>
-    matrix(nrow = nchar(d[1]), byrow = TRUE)
-}
-
+x <- parse_board(readLines("data/aoc_17"))
+c(part1 = play_sim(x, 3L),
+  part2 = play_sim(x, 4L))

@@ -1,7 +1,6 @@
 # part one
 split_number <- function(x)
-  as.character(x) |> strsplit("") |>
-  unlist() |> as.integer()
+  as.character(x) |> strsplit("") |> unlist() |> as.integer()
 
 move <- function(x) {
   current <- x[1L]
@@ -18,19 +17,16 @@ move <- function(x) {
 }
 
 play <- function(x, n, part_two = FALSE) {
-  for (i in seq_len(n))
-    x <- move(x)
+  for (i in 1:n) x <- move(x)
   id_one <- which.min(x)
 
-  if (part_two)
-    prod(x[id_one + 1:2])
+  if (part_two) prod(x[id_one + 1:2])
   else {
     ids <- seq_len(id_one)
     c(x[-ids], x[ids - 1])
   }
 }
 
-# test_id <- split_number(389125467)
 input <- split_number(247819356)
 input2 <- c(input, seq(max(input) + 1, 1e6))
 

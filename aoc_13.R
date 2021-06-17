@@ -1,34 +1,25 @@
-d <- readLines("data/aoc_13")
+get_waiting_times <- function(ids, stamp) {
+  ids <- na.omit(ids)
+  waiting <- Map(seq, 0L - stamp, ids, by = ids) |>
+    vapply(\(x) min(x[x > 0]), 1L)
+  ids[which.min(waiting)] * min(waiting)
+}
 
-timestmp <- as.numeric(d[1])
-bus_id_raw <- as.numeric(strsplit(d[[2]], ",")[[1]])
-
-# Part one
-bus_id <- bus_id_raw[!is.na(bus_id_raw)]
-
-schedule <- mapply(seq, 0, bus_id + timestmp, by = bus_id)
-waiting  <- sapply(schedule, function(x) {
-                  dif <- x - timestmp
-                  min(dif[dif > 0])
-})
-
-bus_id[which(waiting == min(waiting))] * min(waiting)
-
-# {{{ Part two
-deltas <- which(!is.na(bus_id_raw)) - 1
-vals <- cbind(bus_id, deltas)
-vals <- split(vals, seq(nrow(vals)))
+deltas <- function(ids) {
+  i <- !is.na(ids)
+  cbind(ids[i], which(i) - 1) |> split(1:sum(i))
+}
 
 superbus <- function(x, y) {
   a <- x[1]; first <- x[2]
   b <- y[1]; delta <- y[2]
-
   period <- a * b
-  set   <- seq(first, period, by = a)
-  first  <- set[which((set + delta) %% b == 0)]
-
-  return(c(period, first))
+  set    <- seq(first, period, by = a)
+  first  <- set[(set + delta) %% b == 0]
+  c(period, first)
 }
 
-result <- Reduce(superbus, vals)[2]
-print(result, digits = 15)
+x <- scan("data/aoc_13", 1L, sep = ",", na = "x")
+c(part1 = get_waiting_times(x[-1], x[1]),
+  part2 = Reduce(superbus, deltas(x[-1]))[2]
+) |> print(15)

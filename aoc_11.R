@@ -10,12 +10,12 @@ count <- function(xy, m, immediate) {
   nr <- nrow(m); nc <- ncol(m)
 
   if (is.na(m[x, y])) return(NA)
-  adj <- if (immediate) list(
+  adj <- if (immediate) list(              # embarrassing ...
       m[x + 1, y],     m[x - 1, y],        # down, up
       m[x, y + 1],     m[x, y - 1],        # right, left
       m[x - 1, y + 1], m[x - 1, y - 1],    # up: right, left
       m[x + 1, y + 1], m[x + 1, y - 1])    # down: right, left
-    else list(                             # embarrassing ...
+    else list(
       m[seq(x + 1, nr), y], m[seq(x - 1, 1), y],
       m[x, seq(y + 1, nc)], m[x, seq(y - 1, 1)],
       diag(m[seq(x - 1, 1), seq(y + 1, nc)]),

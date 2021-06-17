@@ -21,5 +21,5 @@ count_valid <- function(x) {
 }
 
 d <- parseports(readLines("data/aoc_04"))
-sum(count_fields(d) == 7)
-count_valid(d)
+c(part1 = sum(count_fields(d) == 7),
+  part2 = count_valid(d))

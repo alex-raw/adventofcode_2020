@@ -11,10 +11,9 @@ count_trees <- function(m, x, y)
   sum(m[x = get_xy(x, ncol(m), x * ncol(m)),
         y = get_xy(y, nrow(m), ncol(m))])
 
-# Part 1
 m <- parse_grid(readLines("data/aoc_03"))
-count_trees(m, 3, 1)
-
-# Part 2
 slopes <- rbind(c(1, 1), c(3, 1), c(5, 1), c(7, 1), c(1, 2))
-prod(mapply(count_trees, slopes[, 1], slopes[, 2], MoreArgs = list(m = m)))
+
+c(part1 = count_trees(m, 3, 1),
+  part2 = prod(mapply(count_trees, slopes[, 1], slopes[, 2],
+                      MoreArgs = list(m = m))))
