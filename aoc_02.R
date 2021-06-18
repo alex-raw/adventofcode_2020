@@ -4,9 +4,8 @@ parse_input <- function(x) {
 }
 
 with(parse_input(readLines("data/aoc_02")), {
-  pass <- strsplit(pass, "")
   n <- mapply(\(x, y) sum(x == y), char, strsplit(pass, ""))
   c(part1 = sum(n >= a & n <= b),
-    part2 = sum(xor(pass[a] == char,
-                    pass[b] == char)))
+    part2 = sum(xor(substr(pass, a, a) == char,
+                    substr(pass, b, b) == char)))
 })
